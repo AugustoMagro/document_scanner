@@ -67,7 +67,7 @@ class VideoCapture():
             #cv2.imshow("process image", process_image)
             #cv2.imshow("process image2", adaptive_process)
 
-            key = cv2.waitKey(1) & 0b11111111  
+            key = cv2.waitKey(1) & 0b11111111
 
             if key == ord("q"):
                 self.cap.release()
