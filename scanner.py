@@ -49,59 +49,58 @@ class VideoCapture():
                     self.document_contour = approx
                     max_area = area
     
-        cv2.drawContours(frame, [self.document_contour], -1, (0, 255, 0), 3)
+        cv2.drawContours(frame, [self.document_contour], -1, (0, 255, 0), 1)
     
     def videoRecording(self):
-        while self.cap.isOpened():
-            _, frame = self.cap.read()
-            frame_copy = frame.copy()
+        _, frame = self.cap.read()
+        frame_copy = frame.copy()
 
-            self.scan_detection(frame_copy, frame)
+        self.scan_detection(frame_copy, frame)
 
-            cv2.imshow("webcam", frame)
+        cv2.imshow("webcam", frame)
 
-            warped = four_point_transform(frame_copy, self.document_contour.reshape(4, 2))
-            cv2.imshow("warped", warped)
+        warped = four_point_transform(frame_copy, self.document_contour.reshape(4, 2))
+        cv2.imshow("warped", warped)
 
-            process_image, adaptive_process = self.image_processing(warped)
-            #cv2.imshow("process image", process_image)
-            #cv2.imshow("process image2", adaptive_process)
+        process_image, adaptive_process = self.image_processing(warped)
+        #cv2.imshow("process image", process_image)
+        #cv2.imshow("process image2", adaptive_process)
 
-            key = cv2.waitKey(1) & 0b11111111
+        # key = cv2.waitKey(1) & 0b11111111
 
-            if key == ord("q"):
-                self.cap.release()
-                cv2.destroyAllWindows()
+        # if key == ord("q"):
+        #     self.cap.release()
+        #     cv2.destroyAllWindows()
 
-            if key == ord("s"):
-                pdf_bytes = self.convert_image_to_pdf(warped)
-                file = open(f"WRAPED_{datetime.now().strftime('%d%m%Y_%H%M%S')}.pdf", "wb")
-                file.write(pdf_bytes)
-                file.close()
+        # if key == ord("s"):
+        #     pdf_bytes = self.convert_image_to_pdf(warped)
+        #     file = open(f"WRAPED_{datetime.now().strftime('%d%m%Y_%H%M%S')}.pdf", "wb")
+        #     file.write(pdf_bytes)
+        #     file.close()
 
-                pdf_bytes = self.convert_image_to_pdf(warped)
-                file = open(f"PROCESS.pdf", "wb")
-                file.write(pdf_bytes)
-                file.close()
-                
-                reader = PyPDF2.PdfReader("PROCESS.pdf")
-                print(len(reader.pages))
-                print(reader.pages[0].extract_text())
+        #     pdf_bytes = self.convert_image_to_pdf(warped)
+        #     file = open(f"PROCESS.pdf", "wb")
+        #     file.write(pdf_bytes)
+        #     file.close()
+            
+        #     reader = PyPDF2.PdfReader("PROCESS.pdf")
+        #     print(len(reader.pages))
+        #     print(reader.pages[0].extract_text())
 
-            elif key == ord("c"):
-                pdf_bytes = self.convert_image_to_pdf(warped)
-                tipo = "COMPROVANTE"
-                self.get_name(pdf_bytes, tipo)
+        # elif key == ord("c"):
+        #     pdf_bytes = self.convert_image_to_pdf(warped)
+        #     tipo = "COMPROVANTE"
+        #     self.get_name(pdf_bytes, tipo)
 
-            elif key == ord("e"):
-                pdf_bytes = self.convert_image_to_pdf(warped)
-                tipo = "ENVELOPE"
-                self.get_name(pdf_bytes, tipo)
+        # elif key == ord("e"):
+        #     pdf_bytes = self.convert_image_to_pdf(warped)
+        #     tipo = "ENVELOPE"
+        #     self.get_name(pdf_bytes, tipo)
 
-            elif key == ord("f"):
-                pdf_bytes = self.convert_image_to_pdf(warped)
-                tipo = "FICHA"
-                self.get_name(pdf_bytes, tipo)
+        # elif key == ord("f"):
+        #     pdf_bytes = self.convert_image_to_pdf(warped)
+        #     tipo = "FICHA"
+        #     self.get_name(pdf_bytes, tipo)
 
     def convert_image_to_pdf(self, img):
         path_image = f"temp_img.jpg"
@@ -114,6 +113,4 @@ class VideoCapture():
     
     def get_name(self, pdf_bytes, tipo):        
         App(pdf_bytes, tipo)
-    
-if __name__ == "__main__":
-    VideoCapture()
+
