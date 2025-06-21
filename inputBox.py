@@ -27,8 +27,19 @@ class App(ck.CTk):
         self.entryBox = ck.CTkEntry(self, placeholder_text="Numero envelope", border_width=0)
         self.entryBox.grid(row=0, column=0, ipadx=20, ipady=17)
 
-        self.button = ck.CTkButton(self, text="my button", command=self.DialogResult)
-        self.button.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
+        self.frame_buttons = ck.CTkFrame(self)
+        self.frame_buttons.grid(row=0, column=1, padx=10, pady=10, sticky="nswe")
+        self.frame_buttons.grid_columnconfigure(0, weight=1, uniform="a")
+        self.frame_buttons.grid_rowconfigure((0,1,2,3), weight=1, uniform="a")
+
+        self.buttonEnvelope = ck.CTkButton(self.frame_buttons, text="Envelope", command=self.buttonEnvelope)
+        self.buttonEnvelope.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+        self.buttonFicha = ck.CTkButton(self.frame_buttons, text="Ficha", command=self.buttonFicha)
+        self.buttonFicha.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
+        self.buttonDt = ck.CTkButton(self.frame_buttons, text="DT", command=self.buttonDt)
+        self.buttonDt.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+        self.buttonComprovante = ck.CTkButton(self.frame_buttons, text="Comprovante", command=self.buttonComprovante)
+        self.buttonComprovante.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
 
         self.cap = cv2.VideoCapture(0)
         self.cap = cv2.VideoCapture(0 + cv2.CAP_DSHOW)
@@ -52,7 +63,7 @@ class App(ck.CTk):
         frame_copy = frame.copy()
 
         if ret:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA)
             self.photo = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.cam1.configure(image=self.photo)
             
@@ -62,7 +73,7 @@ class App(ck.CTk):
 
     def scan_detection(self, image, frame):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # blur = cv2.GaussianBlur(gray, (5, 5), 0)
+        blur = cv2.GaussianBlur(gray, (5, 5), 0)
         _, threshold = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     
         contours, _ = cv2.findContours(threshold, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -90,14 +101,26 @@ class App(ck.CTk):
         image = Image.open(path_image)
         pdf_bytes = img2pdf.convert(image.filename)
         image.close()
-        os.remove("src/temp_img.jpg")
+        # os.remove("src/temp_img.jpg")
         return pdf_bytes
 
-    def DialogResult(self):
+    def DialogResult(self, nome):
         pdf_bytes = self.convert_image_to_pdf(self.warped)
-        file = open(f"WRAPED_{datetime.now().strftime('%d%m%Y_%H%M%S')}.pdf", "wb")
+        file = open(f"{nome}_{self.entryBox.get().strip()}_{datetime.now().strftime('%d%m%Y_%H%M%S')}.pdf", "wb")
         file.write(pdf_bytes)
         file.close()
+
+    def buttonEnvelope(self):
+        self.DialogResult("ENVELOPE")
+
+    def buttonFicha(self):
+        self.DialogResult("FICHA")
+
+    def buttonDt(self):
+        self.DialogResult("DT")
+    
+    def buttonComprovante(self):
+        self.DialogResult("COMPROVANTE")
 
 if __name__ == '__main__':
     app = App()
