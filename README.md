@@ -1,1 +1,1 @@
-WebCam Document Scanner
+# WebCam Document Scanner
