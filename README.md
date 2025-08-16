@@ -1,6 +1,6 @@
 # WebCam Document Scanner
 
-* This is a Scanner for Webcam, it´s a better way to scan a document than the scanner that is with your Printer. *
+This is a Scanner for Webcam, it´s a better way to scan a document than the scanner that is with your Printer.
 
 A company has a many physical documents that´s need to be upload to a cloud storage and the process to scan each document with a printer scanner can be time consuming, difficult and wasting a employee time witch could be used for a better activity.
 
