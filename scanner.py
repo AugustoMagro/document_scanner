@@ -10,7 +10,7 @@ from tkinter import *
 from datetime import datetime
 from imutils.perspective import four_point_transform
 from PIL import Image, ImageTk
-from inputBox import App
+from App import App
 
 WIDTH, HEIGHT = 1980, 1080
 
