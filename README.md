@@ -6,9 +6,6 @@ A company has a many physical documents that´s need to be upload to a cloud sto
 
 I experienced that for my self, i was in charge to scan many documents and after that upload then to a cloud environment, the activity took me 3 hours and i sad in my mind, I'll never do it again, so i create a WebCam Scanner and now the same process take 1 hour include the upload to Cloud, is simple, easy, and created to work in any computer.
 
-## UI
-[text](../../Users/augus/OneDrive/Imagens)
-
 ## Quick start
 ### Clone the repository
 ```bash
