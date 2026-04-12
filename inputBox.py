@@ -16,19 +16,33 @@ class App(ck.CTk):
         super().__init__()
         self.back = False
         self.result = ""
-        # self.pdf_bytes = pdf_bytes
-        # self.tipo = tipo
 
         self.title("Scanner")
         self.geometry("1920x1080")
-        self.grid_columnconfigure((0,1), weight=1, uniform="a")
-        self.grid_rowconfigure((0,1), weight=1, uniform="a")
+        self.grid_columnconfigure((0), weight=1, uniform="a")
+        self.grid_columnconfigure((1), weight=3, uniform="a")
+        self.grid_rowconfigure((0), weight=1, uniform="a")
+        self.grid_rowconfigure((1,2), weight=4, uniform="a")
 
-        self.entryBox = ck.CTkEntry(self, placeholder_text="Numero envelope", border_width=0)
-        self.entryBox.grid(row=0, column=0, ipadx=20, ipady=17)
+        self.header = ck.CTkFrame(self)
+        self.header.grid_columnconfigure(0, weight=1, uniform="a")
+        self.header.grid_rowconfigure(0, weight=1, uniform="a")
+        self.header.grid(row=0, column=0, columnspan=2, sticky="nswe")
 
-        self.frame_buttons = ck.CTkFrame(self)
-        self.frame_buttons.grid(row=0, column=1, padx=10, pady=10, sticky="nswe")
+        title = ck.CTkLabel(self.header, text="Scanner", font=("Arial", 20, "bold"))
+        title.grid(row=0, column=0, sticky="nswe")
+
+        infos = ck.CTkFrame(self)
+        infos.grid_columnconfigure((0,1), weight=1, uniform="a")
+        infos.grid_rowconfigure(0, weight=1, uniform="a")
+        infos.grid_rowconfigure(1, weight=3, uniform="a")
+        infos.grid(row=1, column=0, rowspan=2, sticky="nswe")
+
+        self.entryBox = ck.CTkEntry(infos, placeholder_text="Digite o numero do envelope")
+        self.entryBox.grid(row=0, column=0, columnspan=2, padx=15, pady=40, sticky="nswe")
+
+        self.frame_buttons = ck.CTkFrame(infos)
+        self.frame_buttons.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="nswe")
         self.frame_buttons.grid_columnconfigure(0, weight=1, uniform="a")
         self.frame_buttons.grid_rowconfigure((0,1,2,3), weight=1, uniform="a")
 
@@ -48,11 +62,11 @@ class App(ck.CTk):
         self.document_contour = np.array([[0, 0], [WIDTH, 0], [WIDTH, HEIGHT], [0, HEIGHT]])
 
 
-        self.cam1 = ck.CTkLabel(self)
-        self.cam1.grid(row=1, column=0, sticky="nsew")
+        self.cam1 = ck.CTkLabel(self, text="", corner_radius=12)
+        self.cam1.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
         
-        self.cam2 = ck.CTkLabel(self)
-        self.cam2.grid(row=1, column=1, sticky="nsew")
+        self.cam2 = ck.CTkLabel(self, text="", corner_radius=12)
+        self.cam2.grid(row=2, column=1, padx=10, pady=10, sticky="nsew")
 
         self.updateImage()
 
@@ -64,6 +78,7 @@ class App(ck.CTk):
 
         if ret:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA)
+            # frame = cv2.rotate(frame, cv2.ROTATE_180)
             self.photo = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.cam1.configure(image=self.photo)
             
